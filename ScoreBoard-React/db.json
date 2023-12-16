@@ -1,0 +1,40 @@
+{
+  "boards": [
+    {
+      "id": 8206,
+      "firstCount": 10,
+      "secondCount": 12,
+      "title": "ilk mac"
+    },
+    {
+      "id": 99308,
+      "firstCount": 10,
+      "secondCount": 12,
+      "title": "ikinci mac"
+    },
+    {
+      "id": 65950,
+      "firstCount": 6,
+      "secondCount": 5,
+      "title": "fsafas"
+    },
+    {
+      "id": 33633,
+      "firstCount": 4,
+      "secondCount": 4,
+      "title": "sadfasdfdsaf"
+    },
+    {
+      "id": 53875,
+      "firstCount": 0,
+      "secondCount": 0,
+      "title": "sadfasdfsadfs"
+    },
+    {
+      "id": 43834,
+      "firstCount": 4,
+      "secondCount": 2,
+      "title": "dsfsfsdafsd"
+    }
+  ]
+}
