@@ -4,45 +4,41 @@ import SavedCounts from "./components/SavedCounts";
 import { useState, useEffect, useSyncExternalStore } from "react";
 import PlsSaveCount from "./components/PlsSaveCount";
 import axios from "axios";
+import { Box, Stack } from "@mui/material";
 
 function App() {
   const [firstCount, setFirstCount] = useState(0);
   const [secondCount, setSecondCount] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [boards, setBoards] = useState([]);
-  const [log, setLog] = useState(true);
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //todo: refactor axios.get()
         const response = await axios({
           method: "get",
           url: "http://localhost:3000/boards",
         });
         setBoards(response.data);
+        setRefresh(false);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchData();
-  }, []); // Boş bağımlılık listesi, bu etkileşimin yalnızca bir kez çalışmasını sağlar.
+    refresh && fetchData();
+  }, [refresh]);
 
-  const changeCountFirst = (e) => {
-    {
-      e.target.innerHTML === "+"
-        ? setFirstCount(firstCount + 1)
-        : setFirstCount(firstCount - 1);
-    }
+  const createChangeCountFunction = (setCountFunction, value) => (e) => {
+    e.target.innerHTML === "+"
+      ? setCountFunction((prevState) => prevState + value)
+      : setCountFunction((prevState) => prevState - value);
   };
 
-  const changeCountSecond = (e) => {
-    {
-      e.target.innerHTML === "+"
-        ? setSecondCount(secondCount + 1)
-        : setSecondCount(secondCount - 1);
-    }
-  };
+  const changeCountFirst = createChangeCountFunction(setFirstCount, 1);
+  const changeCountSecond = createChangeCountFunction(setSecondCount, 1);
 
   const resetCounts = () => {
     setFirstCount(0);
@@ -50,12 +46,8 @@ function App() {
   };
 
   const saveButton = () => {
-    {
-      inputValue !== "" ? post() : warn();
-    }
-    setInputValue("");
-    setFirstCount(0);
-    setSecondCount(0);
+    if (!inputValue) return warn();
+    post();
   };
 
   const warn = () => {
@@ -73,34 +65,35 @@ function App() {
         title: inputValue,
       },
     });
-    const fetchDataTwo = async () => {
-      try {
-        const response = await axios({
-          method: "get",
-          url: "http://localhost:3000/boards",
-        });
-        setBoards(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchDataTwo();
+    setInputValue("");
+    setFirstCount(0);
+    setSecondCount(0);
+    setRefresh(true);
   };
 
   return (
-    <>
-      <DefaultBoard
-        firstCount={firstCount}
-        secondCount={secondCount}
-        changeCountFirst={changeCountFirst}
-        changeCountSecond={changeCountSecond}
-        resetCounts={resetCounts}
-        saveButton={saveButton}
-        inputValue={inputValue}
-        setInputValue={setInputValue} // setInputValue fonksiyonu props olarak geçirildi
-      />
-      {boards.length === 0 ? <PlsSaveCount /> : <SavedCounts boards={boards} />}
-    </>
+    <Box>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+      >
+        <DefaultBoard
+          firstCount={firstCount}
+          secondCount={secondCount}
+          changeCountFirst={changeCountFirst}
+          changeCountSecond={changeCountSecond}
+          resetCounts={resetCounts}
+          saveButton={saveButton}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+        />
+        {boards.length === 0 ? (
+          <PlsSaveCount />
+        ) : (
+          <SavedCounts boards={boards} />
+        )}
+      </Stack>
+    </Box>
   );
 }
 
