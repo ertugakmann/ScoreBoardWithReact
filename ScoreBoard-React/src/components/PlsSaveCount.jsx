@@ -1,13 +1,15 @@
+import * as React from "react";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
+
 function PlsSaveCount() {
   return (
-    <div>
-      <div className="saved-counts">
-        <h1>SAVED COUNTS</h1>
-        <div>
-          <h2>There is not a saved count.</h2>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ display: "flex", justifyContent: "center", paddingTop: "70px" }}>
+      <Box>
+        <Typography variant="h3">SAVED COUNTS</Typography>
+        <Typography variant="h5">There is not a saved count.</Typography>
+      </Box>
+    </Box>
   );
 }
 
